@@ -37,7 +37,7 @@ public class Game extends JPanel {
             if (i == screenHeight/tileSize-1) {
                 for (int j = pathStart; j < pathStart + pathWidth; j++) {
                     spawnerPosition[i] = j;
-                    i++; // only increment i in this loop
+                    i++;
                     if (i >= screenHeight/tileSize) {
                         break; // break out of loop if end of array is reached
                     }
@@ -80,7 +80,6 @@ public class Game extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Calculate elapsed time
         long elapsed = System.currentTimeMillis() - startTime;
         // Draw elapsed time on the screen
         g.setColor(Color.WHITE);
@@ -105,6 +104,7 @@ public class Game extends JPanel {
     }
 
     public void moveSpawners() {
+        // Move the spawners down by one row and randomly left or right
         int move = (int)(Math.random()*3)-1;
 
         for (int i = screenHeight/tileSize-1; i > 0; i--) {
@@ -121,7 +121,9 @@ public class Game extends JPanel {
         checkCollision();
     }
 
+
     public void checkCollision() {
+        // Check for collision with the player and end the game if necessary
         if (this.highScore == null) {
             this.highScore = new HighScore();
         }
@@ -136,15 +138,14 @@ public class Game extends JPanel {
             // Calculate elapsed time
             long elapsed = System.currentTimeMillis() - startTime;
             // Prompt the user for an option to save their score
-            int option = JOptionPane.showOptionDialog(this, String.format("Game over! Elapsed time: %d sec. Do you want to save your score?", elapsed / 1000), "Save Score", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            int option = JOptionPane.showOptionDialog(this, String.format("Game over! Elapsed time: %d sec. Do you want to save your score?", elapsed / 1000), "Save Score",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (option == JOptionPane.YES_OPTION) {
                 // Prompt the user for their name and add their score to the high score list
                 String name = JOptionPane.showInputDialog(this, "Enter your name:");
                 highScore.addScore(new Score(name, elapsed/1000));
             }
+            // Exit the game
             System.exit(0);
         }
     }
 }
-
-

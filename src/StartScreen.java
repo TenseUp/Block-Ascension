@@ -11,19 +11,21 @@ import javax.swing.JPanel;
 
 public class StartScreen extends JPanel {
 
+    // Declare instance variables
     private JFrame frame;
-
     private HighScore highScore;
-
     private JButton clearButton;
     private JButton startButton;
 
+    // Constructor
     public StartScreen() {
         // Initialize JFrame
         frame = new JFrame("Block Ascension");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500, 800));
         frame.setResizable(false);
+
+        // Initialize Clear Scores button
         clearButton = new JButton("Clear Scores");
         clearButton.setBounds(200, 300, 100, 50);
         clearButton.addActionListener(new ActionListener() {
@@ -36,7 +38,7 @@ public class StartScreen extends JPanel {
         });
         add(clearButton);
 
-        // Initialize start button
+        // Initialize Start Game button
         startButton = new JButton("Start Game");
         startButton.setBounds(200, 200, 100, 50);
         startButton.addActionListener(new ActionListener() {
@@ -49,7 +51,6 @@ public class StartScreen extends JPanel {
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
-
 
                 // Start the game loop in a separate thread
                 Thread gameThread = new Thread(new Runnable() {
@@ -66,8 +67,13 @@ public class StartScreen extends JPanel {
                                 r.printStackTrace();
                             }
                             counter+=10;
-                            if(counter % 50 == 0){
-                                speed--;
+                            if (counter % 100 == 0) {
+                                double rand = Math.random();
+                                if (rand < 0.2) {
+                                    speed++;
+                                }else {
+                                    speed--;
+                                }
                             }
                         }
                     }
@@ -77,7 +83,7 @@ public class StartScreen extends JPanel {
         });
         add(startButton);
 
-        // Add panel to JFrame and show
+        // Add panel to JFrame and show it
         frame.getContentPane().add(this);
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -100,6 +106,7 @@ public class StartScreen extends JPanel {
         g.setFont(new Font("Arial", Font.PLAIN, 24));
         g.drawString("High Scores:", 100, 200);
 
+        // Retrieve scores and display them up to the top 5
         ArrayList<Score> scores = highScore.getScores();
         int numScoresToDisplay = Math.min(5, scores.size());
         for (int i = 0; i < numScoresToDisplay; i++) {
